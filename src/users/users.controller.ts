@@ -1,7 +1,12 @@
-import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { EditUserDto } from './dto/edit-user.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
+import { Roles } from './roles.decorator';
+import { Role } from './entities/role.enum';
+import { RolesGuard } from './roles.guard';
 
 @Controller('users')
 export class UsersController {
@@ -13,6 +18,8 @@ export class UsersController {
     }
 
     @Post('register')
+    @Roles(Role.Admin)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     async createUser(
         @Body('username') username:string,
         @Body('password') password:string

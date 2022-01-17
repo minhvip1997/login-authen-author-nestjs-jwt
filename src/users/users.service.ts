@@ -52,7 +52,7 @@ export class UsersService {
       async createOne(dto: CreateUserDto){
         const userExist = await this.usersRepository.findOne({ username: dto.username})
 
-        if(userExist) throw new NotFoundException(' user register exist email')
+        if(userExist) throw new NotFoundException(' user register exist username')
 
         const newUser = this.usersRepository.create(dto);
 
